@@ -34,9 +34,9 @@ on boot
     setprop ro.ril.def.agps.mode 2
 
     # performance tweaks for flash
-    write /sys/block/mtdblock1/bdi/read_ahead_kb 4
-    write /sys/block/mtdblock2/bdi/read_ahead_kb 4
-    write /sys/block/mtdblock3/bdi/read_ahead_kb 4
+    write /sys/block/mtdblock1/bdi/read_ahead_kb 0
+    write /sys/block/mtdblock2/bdi/read_ahead_kb 0
+    write /sys/block/mtdblock3/bdi/read_ahead_kb 0
 
     # Fix permissions for bma150 (accelerometer)
     chown system system /sys/devices/i2c-0/0-0038/rate
@@ -48,20 +48,16 @@ on boot
 
 service wpa_supplicant /system/bin/wpa_supplicant -Dwext -ieth0 -c/data/misc/wifi/wpa_supplicant.conf
     socket wpa_eth0 dgram 660 wifi wifi
-    disabled
     oneshot
 
 service dhcpcd_eth0 /system/bin/dhcpcd -BK -t 30
-    disabled
     oneshot
 
 service hciattach /system/bin/brcm_patchram_plus --enable_hci --enable_lpm --baudrate 3000000 --patchram /system/etc/firmware/bcm4329.hcd /dev/ttyHS0
     user bluetooth
     group bluetooth net_bt_admin
-    disabled
 
 service port-bridge /system/bin/port-bridge /dev/smd0 /dev/ttyGS0 &
-    disabled
     oneshot
 
 service qmuxd /system/bin/qmuxd
